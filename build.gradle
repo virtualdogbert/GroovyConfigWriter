@@ -74,7 +74,7 @@ bintray {
         name = 'GroovyConfigWriter'
         desc = 'This library provides a writer for Groovy base configuration, that can be parsed buy the ConfigSlurper.'
         issueTrackerUrl = "https://github.com/virtualdogbert/GroovyConfigWriter/issues"
-        vcsUrl = "https://github.com/virtualdogbert/GroovyConfigWriter"
+        vcsUrl = "https://github.com/virtualdogbert/GroovyConfigWriter/"
         websiteUrl = "https://virtualdogbert.github.io/GroovyConfigWriter"
         licenses = ['Apache-2.0']
     }
