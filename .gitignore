@@ -1,0 +1,8 @@
+.idea/*
+build/*
+out/*
+target
+*.iml
+*.zip*
+plugin.xml
+*taskArtifacts*

@@ -1,0 +1,34 @@
+== Getting Started
+
+1. Add the following dependency:
+.build.gradle
+----
+compile 'com.virtualdogbert:GroovyConfigWriter:0.1'
+----
+
+2. Some sample code
+[source,groovy]
+----
+        //Some sample code using snake yml to parse yml
+        File config = new File('/path/to/application.yml')
+        String configText = config.newDataInputStream().getText()
+        List<String> docs = configText.split('---\n')
+
+        //Writes out to a file
+        //GroovyConfigWriter configWriter =
+        new GroovyConfigWriter('/output/path/to/application.groovy')
+
+        //writes to System.out
+        GroovyConfigWriter configWriter = new GroovyConfigWriter()
+        Yaml yaml = new Yaml()
+
+        docs.findResults {
+            configWriter.writeToGroovy(yaml.load(it))
+            yaml.load(it)
+        }
+
+        //flushes writer and closes it
+        configWriter.close()
+----
+
+
