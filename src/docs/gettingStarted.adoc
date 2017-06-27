@@ -31,4 +31,6 @@ compile 'com.virtualdogbert:GroovyConfigWriter:0.1'
         configWriter.close()
 ----
 
+https://virtualdogbert.github.io/GroovyConfigWriter/groovydoc/index.html[Groovy Docs]
+
 
