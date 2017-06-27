@@ -17,8 +17,9 @@
  *  under the License.
  */
 
-package com.virtualdogbert
+package virtualdogbert
 
+import com.virtualdogbert.GroovyConfigWriter
 import org.yaml.snakeyaml.Yaml
 import spock.lang.Specification
 

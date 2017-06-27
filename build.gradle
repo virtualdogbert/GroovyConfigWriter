@@ -51,14 +51,87 @@ dependencies {
     )
 }
 
+task sourceJar(type: Jar) {
+    from sourceSets.main.allSource
+    classifier "sources"
+}
+
+
+
+ext {
+    theTitle = 'Groovy Confit Writer'
+    titleForDocumentation = archivesBaseName + ' ' + version
+    packageTitle = group
+    description = description
+}
+
+task jarDoc(type: Jar, dependsOn: [javadoc, groovydoc]) {
+    classifier = 'javadoc'
+    from docsDir
+}
+
+javadoc {
+    options.overview('overview.html')
+    options.showAll()
+    options.encoding('UTF-8')
+    options.setUse(true)
+    options.author(true)
+    options.version(true)
+    options.windowTitle(titleForDocumentation)
+    options.docTitle(titleForDocumentation)
+    doFirst {
+        javadoc.title = titleForDocumentation
+        javadoc.options.docTitle = javadoc.title
+    }
+}
+
+if (JavaVersion.current().isJava8Compatible()) {
+    tasks.withType(Javadoc) {
+        // disable the crazy super-strict doclint tool in Java 8
+        //noinspection SpellCheckingInspection
+        options.addStringOption('Xdoclint:none', '-quiet')
+    }
+}
+
+groovydoc {
+    dependsOn(classes)
+    includePrivate = true
+    use = true
+    windowTitle = packageTitle
+    docTitle = packageTitle
+    header = packageTitle
+    include 'com/virtualdogbert/**'
+    overviewText = project.resources.text.fromFile('overview.html')
+}
 
 publishing {
     publications {
         groovyMaven(MavenPublication) {
             from components.java
+
+            artifact(sourceJar) {
+                classifier "sources"
+            }
+
+            artifact jarDoc {
+                classifier = 'javadoc'
+            }
         }
+
+
     }
 }
+
+task jarSrc(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives(jarSrc)
+    archives(jarDoc)
+}
+
 
 bintray {
 
@@ -73,9 +146,9 @@ bintray {
         repo = 'maven'
         name = 'GroovyConfigWriter'
         desc = 'This library provides a writer for Groovy base configuration, that can be parsed buy the ConfigSlurper.'
-        issueTrackerUrl = "https://github.com/virtualdogbert/GroovyConfigWriter/issues"
-        vcsUrl = "https://github.com/virtualdogbert/GroovyConfigWriter/"
-        websiteUrl = "https://virtualdogbert.github.io/GroovyConfigWriter"
+        issueTrackerUrl = "https://github.com/com.virtualdogbert/GroovyConfigWriter/issues"
+        vcsUrl = "https://github.com/com.virtualdogbert/GroovyConfigWriter/"
+        websiteUrl = "https://com.virtualdogbert.github.io/GroovyConfigWriter"
         licenses = ['Apache-2.0']
     }
 }
