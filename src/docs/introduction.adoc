@@ -4,7 +4,7 @@ This Library is a first attempt, at making a config writer for the groovy format
 slurper. I don't make any claims that this covers all edge cases, in fact there are a few hacks to
 make this work with a sample from Grails application.yml. If you come across edge cases that don't
 work be sure to raise an issue on github:
-https://www.youtube.com/watch?v=aro3_RZqgtU
+https://github.com/virtualdogbert/GroovyConfigWriter/issues
 
 I wrote this to be used in a script to provide a conversion from yml to groovy, which I though there
 should be, because I find the groovy format to be more flexible, and readable, then yml. I found it
