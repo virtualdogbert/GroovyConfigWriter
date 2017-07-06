@@ -241,7 +241,7 @@ class GroovyConfigWriter {
     }
 
     /**
-     * Checks key names to see of they are valid java names for java 8.
+     * Checks key names to see of they are valid java names for java 7.
      *
      * @param keys a set of keys to check
      *
@@ -251,7 +251,7 @@ class GroovyConfigWriter {
 
         for (String key : keys) {
 
-            if (!SourceVersion.RELEASE_8.isName(key) && !(quoteValues.contains(key))) {
+            if (!SourceVersion.RELEASE_7.isName(key) && !(quoteValues.contains(key))) {
                 return false
             }
 
