@@ -3,7 +3,7 @@
 1. Add the following dependency:
 .build.gradle
 ----
-compile 'com.virtualdogbert:GroovyConfigWriter:0.1'
+compile 'com.virtualdogbert:GroovyConfigWriter:0.2'
 ----
 
 2. Some sample code
