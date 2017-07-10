@@ -16,8 +16,12 @@ apply plugin: 'com.jfrog.bintray'
 apply plugin: 'idea'
 apply plugin: 'org.asciidoctor.convert'
 
+// sourceCompatibility has to be placed after applying the Groovy (Java) Plugin:
+// See https://stackoverflow.com/questions/21028438/gradle-sourcecompatibility-has-no-effect-to-subprojects
+sourceCompatibility = 1.7
+
 group = "com.virtualdogbert"
-version = "0.1"
+version = "0.2"
 description = "This library provides a writer for Groovy base configuration, that can be parsed buy the ConfigSlurper."
 
 
