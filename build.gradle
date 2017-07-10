@@ -21,7 +21,7 @@ apply plugin: 'org.asciidoctor.convert'
 sourceCompatibility = 1.7
 
 group = "com.virtualdogbert"
-version = "0.1"
+version = "0.2"
 description = "This library provides a writer for Groovy base configuration, that can be parsed buy the ConfigSlurper."
 
 
