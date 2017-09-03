@@ -1,0 +1,29 @@
+== Stand Alone Example
+
+[source,groovy]
+----
+@GrabResolver(name='jcenter', root='http://jcenter.bintray.com/')
+@Grab('org.slf4j:slf4j-api:1.6.0')
+@Grab('com.virtualdogbert:GroovyConfigWriter:0.3')
+@Grab('org.yaml:snakeyaml:1.18')
+
+import com.virtualdogbert.GroovyConfigWriter
+import org.yaml.snakeyaml.Yaml
+
+String ymlFile = '/home/virtualdogbert/application.yml'
+String groovyFile = '/home/virtualdogbert/application.groovy'
+
+File config = new File(ymlFile)
+String configText = config.newDataInputStream().getText()
+List<String> docs = configText.split('---\n')
+GroovyConfigWriter configWriter
+configWriter = new GroovyConfigWriter(groovyFile)
+
+Yaml yaml = new Yaml()
+
+docs.findResults {
+    configWriter.writeToGroovy(yaml.load(it))
+}
+
+configWriter.close()
+----

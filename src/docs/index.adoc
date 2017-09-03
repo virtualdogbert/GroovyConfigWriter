@@ -4,3 +4,5 @@ include::versionHistory.adoc[]
 
 include::gettingStarted.adoc[]
 
+include::exampleGroovyScript.adoc[]
+
