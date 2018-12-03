@@ -1,32 +1,23 @@
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
-        classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.3'
-        classpath 'org.asciidoctor:asciidoctorj-pdf:1.5.0-alpha.11'
-    }
+
+plugins {
+    id 'groovy'
+    id 'maven-publish'
+    id "com.jfrog.bintray" version "1.8.4"
+    id "org.asciidoctor.gradle.asciidoctor" version "1.5.1"
+    id 'idea'
 }
-
-
-apply plugin: 'groovy'
-apply plugin: 'maven-publish'
-apply plugin: 'com.jfrog.bintray'
-apply plugin: 'idea'
-apply plugin: 'org.asciidoctor.convert'
 
 // sourceCompatibility has to be placed after applying the Groovy (Java) Plugin:
 // See https://stackoverflow.com/questions/21028438/gradle-sourcecompatibility-has-no-effect-to-subprojects
-sourceCompatibility = 1.7
+sourceCompatibility = 1.8
 
 group = "com.virtualdogbert"
-version = "0.2"
+version = "1.0"
 description = "This library provides a writer for Groovy base configuration, that can be parsed buy the ConfigSlurper."
 
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '4.0'
+wrapper {
+    gradleVersion = '4.10.2'
 }
 
 
@@ -41,8 +32,8 @@ sourceSets {
 }
 
 dependencies {
-    compile(
-            'org.codehaus.groovy:groovy-all:2.4.11',
+    compileOnly(
+            'org.codehaus.groovy:groovy-all:2.5.4',
             'org.slf4j:slf4j-api:1.6.1',
             'ch.qos.logback:logback-classic:0.9.28'
     )
@@ -51,6 +42,7 @@ dependencies {
             'junit:junit:4.12',
             'org.codehaus.groovy:groovy-all:2.4.11',
             'org.spockframework:spock-core:1.0-groovy-2.4',
+            'ch.qos.logback:logback-classic:0.9.28',
             'org.yaml:snakeyaml:1.18'
     )
 }
@@ -63,7 +55,7 @@ task sourceJar(type: Jar) {
 
 
 ext {
-    theTitle = 'Groovy Confit Writer'
+    theTitle = 'Groovy Config Writer'
     titleForDocumentation = archivesBaseName + ' ' + version
     packageTitle = group
     description = description
@@ -195,19 +187,13 @@ tasks.withType(AsciidoctorTask) {
     }
 }
 
-task asciidoc(type: AsciidoctorTask, description: 'Generates single-page HTML, and PDF') {
-    backends 'html5', 'pdf'
+task asciidoc(type: AsciidoctorTask, description: 'Generates single-page HTML') {
+    backends 'html5'
 }
 
-task docs(dependsOn: [asciidoc]) << {
+task docs(dependsOn: [asciidoc]) {
 
     File dir = new File(buildDir, 'docs')
-    ['pdf'].each { String ext ->
-        File f = new File(dir, 'index.' + ext)
-        if (f.exists()) {
-            f.renameTo new File(dir, project.name + '-' + project.version + '.' + ext)
-        }
-    }
 
     copy {
         from 'src/docs'
