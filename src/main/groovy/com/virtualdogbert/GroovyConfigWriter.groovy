@@ -51,6 +51,8 @@ class GroovyConfigWriter {
      */
     private List<String> quoteValues = ['default']
 
+    private boolean asClosure
+
     /**
      * Constructor for creating a new GroovyConfigWriter.
      *
@@ -60,9 +62,10 @@ class GroovyConfigWriter {
      * @param indentSpacer Optional parameter the spacer to be used for indenting, by default four spaces is used.
      * @param quoteValues
      */
-    GroovyConfigWriter(String fileName = null, Map config = null, String indentSpacer = '    ', List<String> quoteValues = ['default']) {
+    GroovyConfigWriter(String fileName = null, Map config = null, String indentSpacer = '    ', List<String> quoteValues = ['default'], boolean asClosure = true) {
         this.indentSpacer = indentSpacer
         this.quoteValues = quoteValues
+        this.asClosure= asClosure
         Writer writer = null
 
         if (fileName) {
@@ -103,12 +106,28 @@ class GroovyConfigWriter {
             config.each { Object key, Object value ->
 
                 if (value instanceof Map) {
-                    if ((key as String) in quoteValues) {
-                        writeIndent()
-                        output.write("'$key' {\n")
+                    if (((String)key) in quoteValues || ((String)key).contains('-')) {
+                        if(asClosure) {
+                            writeIndent()
+                            output.write("'$key' {\n")
+                        } else{
+                            writeIndent()
+                            output.write("'$key' = ")
+                            writeMapInList(value)
+                            output.write('\n\n')
+                            return
+                        }
                     } else {
-                        writeIndent()
-                        output.write("$key {\n")
+                        if(asClosure) {
+                            writeIndent()
+                            output.write("$key {\n")
+                        }else{
+                            writeIndent()
+                            output.write("$key = ")
+                            writeMapInList(value)
+                            output.write('\n\n')
+                            return
+                        }
                     }
 
                     if (keyNameIsJavaName((value as Map<String, Object>).keySet())) {
@@ -190,17 +209,32 @@ class GroovyConfigWriter {
         int mapIndex = 0
         int endIndex = map.size() - 1
         output.write('[')
+
+        if(!asClosure){
+            output.write('\n')
+        }
+
         ++indentLevel
 
         map.each { Object key, Object value ->
+            if((key as String).contains('-')){
+                key = "'$key'"
+            }
+
+            if((key as String).contains('.') &&!asClosure){
+                String[] keyParts = (key as String).split('\\.')
+                writeIndent()
+                output.write("${keyParts[0]}: [${keyParts[1]}:'$value']")
+                return
+            }
 
             if (value instanceof Map) {
                 writeIndent()
-                output.write('$key: ')
+                output.write("$key: ")
                 writeMapInList(value as Map)
             } else if (value instanceof List) {
                 writeIndent()
-                output.write('$key: ')
+                output.write("$key: ")
                 writeList(value as List)
 
             } else {
@@ -210,7 +244,6 @@ class GroovyConfigWriter {
             }
 
             if (mapIndex != endIndex) {
-                writeIndent()
                 output.write(',\n')
             }
 
@@ -218,8 +251,9 @@ class GroovyConfigWriter {
         }
 
         --indentLevel
+        output.write('\n')
         writeIndent()
-        output.write(']\n')
+        output.write(']')
     }
 
     /**
@@ -251,7 +285,7 @@ class GroovyConfigWriter {
 
         for (String key : keys) {
 
-            if (!SourceVersion.RELEASE_7.isName(key) && !(quoteValues.contains(key))) {
+            if (!SourceVersion.RELEASE_8.isName(key) && !(quoteValues.contains(key))) {
                 return false
             }
 
@@ -286,3 +320,5 @@ class GroovyConfigWriter {
                 value == null
     }
 }
+
+
