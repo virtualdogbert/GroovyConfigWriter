@@ -28,7 +28,7 @@ class GroovyConfigWriterTest extends Specification {
     def setup() {
     }
 
-    void "test convert Grails yml"() {
+    void "test convert Grails yml closure"() {
         when:
             List<String> docs = applicationYml.split('---\n')
             GroovyConfigWriter configWriter = new GroovyConfigWriter()
@@ -40,6 +40,7 @@ class GroovyConfigWriterTest extends Specification {
             }
 
             configWriter.output.flush()
+            println configWriter.output.out.toString()
         then:
             configWriter.output.out.toString() == groovyOutput
     }
@@ -48,7 +49,7 @@ class GroovyConfigWriterTest extends Specification {
     void "test convert Grails yml map"() {
             when:
                 List<String> docs = applicationYml.split('---\n')
-                GroovyConfigWriter configWriter = new GroovyConfigWriter(null, null, '  ', ['default'], false )
+                GroovyConfigWriter configWriter = new GroovyConfigWriter(indentSpacer:'  ', quoteValues:['default'], asClosure:false )
                 configWriter.output = new BufferedWriter(new StringWriter())
                 Yaml yaml = new Yaml()
 
@@ -392,7 +393,6 @@ grails = [
             'Presto',
             'Trident'
           ]
-
         ]
       ]
     ],
@@ -405,14 +405,12 @@ grails = [
       html: [
         'text/html',
         'application/xhtml+xml'
-      ]
-,
+      ],
       js: 'text/javascript',
       json: [
         'application/json',
         'text/json'
-      ]
-,
+      ],
       multipartForm: 'multipart/form-data',
       pdf: 'application/pdf',
       rss: 'application/rss+xml',
@@ -420,13 +418,11 @@ grails = [
       hal: [
         'application/hal+json',
         'application/hal+xml'
-      ]
-,
+      ],
       xml: [
         'text/xml',
         'application/xml'
       ]
-
     ]
   ],
   urlmapping: [
