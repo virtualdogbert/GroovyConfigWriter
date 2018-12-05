@@ -13,11 +13,11 @@ sourceCompatibility = 1.8
 
 group = "com.virtualdogbert"
 version = "1.0"
-description = "This library provides a writer for Groovy base configuration, that can be parsed buy the ConfigSlurper."
+description = "This library provides a writer for Groovy base configuration, that can be parsed by the ConfigSlurper."
 
 
 wrapper {
-    gradleVersion = '4.10.2'
+    gradleVersion = '5.0'
 }
 
 
