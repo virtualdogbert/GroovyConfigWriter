@@ -3,9 +3,10 @@
 ** People have been using it for quite a while with no major complaints, so it's time to kick it to 1.0 with some updates
 ** Added in a asClosure option, which defaults to true, however, it you change it to false you will get a map based output instead.
 ** Updated the dependencies, and made them compileOnly, so in your script/application you will have to provide your own:
-***'org.codehaus.groovy:groovy-all:2.5.4',
-***'org.slf4j:slf4j-api:1.6.1',
-***'ch.qos.logback:logback-classic:0.9.28'
+*** 'org.codehaus.groovy:groovy-all:2.5.4',
+*** 'org.slf4j:slf4j-api:1.6.1',
+*** 'ch.qos.logback:logback-classic:0.9.28'
+** Also updated min version of Java to be Java 8. If you want to use the library with Java 7 continue to use version 0.2/
 * 0.2
 ** A user wanted Java 7 support so I dropped the requirement that it was a Java 8 lib back to 7. However the next release will be for java 8+
 * 0.1
