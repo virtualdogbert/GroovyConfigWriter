@@ -51,6 +51,9 @@ class GroovyConfigWriter {
      */
     private List<String> quoteValues = ['default']
 
+    /**
+     * Flag for the config writer, if should use the closure syntax, or the map syntax for writing out config.
+     */
     private boolean asClosure
 
     /**
@@ -60,13 +63,14 @@ class GroovyConfigWriter {
      * @param config An Optional parameter to pass in config to be written. You can also directly call the writeToGroovy, which could be useful
      * for writing in multiple chunks. This might be useful if your config comes from a yml file, which has multiple documents.
      * @param indentSpacer Optional parameter the spacer to be used for indenting, by default four spaces is used.
-     * @param quoteValues
+     * @param quoteValues values that will be quoted
+     * @param asClosure true by default using the closure syntax, vs the map based syntax for the groovy config.
      */
     GroovyConfigWriter(String fileName = null, Map config = null, String indentSpacer = '    ', List<String> quoteValues = ['default'], boolean asClosure = true) {
         this.indentSpacer = indentSpacer
         this.quoteValues = quoteValues
-        this.asClosure= asClosure
-        Writer writer = null
+        this.asClosure = asClosure
+        Writer writer
 
         if (fileName) {
             writer = new PrintWriter(fileName, "UTF-8")
@@ -94,7 +98,6 @@ class GroovyConfigWriter {
         }
     }
 
-
     /**
      * Writes a config map, to the writer. You can use this directly to write more than one chucks on configuration out.
      * This maybe useful when writing config that comes from yml, that has multiple documents.
@@ -106,11 +109,13 @@ class GroovyConfigWriter {
             config.each { Object key, Object value ->
 
                 if (value instanceof Map) {
-                    if (((String)key) in quoteValues || ((String)key).contains('-')) {
-                        if(asClosure) {
+
+                    if (((String) key) in quoteValues || ((String) key).contains('-')) {
+
+                        if (asClosure) {
                             writeIndent()
                             output.write("'$key' {\n")
-                        } else{
+                        } else {
                             writeIndent()
                             output.write("'$key' = ")
                             writeMapInList(value)
@@ -118,10 +123,11 @@ class GroovyConfigWriter {
                             return
                         }
                     } else {
-                        if(asClosure) {
+
+                        if (asClosure) {
                             writeIndent()
                             output.write("$key {\n")
-                        }else{
+                        } else {
                             writeIndent()
                             output.write("$key = ")
                             writeMapInList(value)
@@ -214,18 +220,21 @@ class GroovyConfigWriter {
         int endIndex = map.size() - 1
         output.write('[')
 
-        if(!asClosure){
+        if (!asClosure) {
             output.write('\n')
         }
 
         ++indentLevel
 
         map.each { Object key, Object value ->
-            if((key as String).contains('-')){
+
+            //Quoting keys with - in them
+            if ((key as String).contains('-')) {
                 key = "'$key'"
             }
 
-            if((key as String).contains('.') &&!asClosure){
+            //Hack for dealing with if a key has a  . in it for map based syntax.
+            if ((key as String).contains('.') && !asClosure) {
                 String[] keyParts = (key as String).split('\\.')
                 writeIndent()
                 output.write("${keyParts[0]}: [${keyParts[1]}:'$value']")
@@ -316,12 +325,12 @@ class GroovyConfigWriter {
      */
     private boolean instanceOfPrimitive(Object value) {
         value instanceof Integer ||
-                value instanceof Long ||
-                value instanceof Double ||
-                value instanceof Float ||
-                value instanceof Short ||
-                value instanceof Boolean ||
-                value == null
+        value instanceof Long ||
+        value instanceof Double ||
+        value instanceof Float ||
+        value instanceof Short ||
+        value instanceof Boolean ||
+        value == null
     }
 }
 
