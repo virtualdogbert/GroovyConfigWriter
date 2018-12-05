@@ -40,7 +40,6 @@ class GroovyConfigWriterTest extends Specification {
             }
 
             configWriter.output.flush()
-            println configWriter.output.out.toString()
         then:
             configWriter.output.out.toString() == groovyOutput
     }

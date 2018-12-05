@@ -1,6 +1,6 @@
 == Introduction
 
-This Library is a first attempt, at making a config writer for the groovy format used, by the config
+This Library is  a config writer for the groovy format used, by the config
 slurper. I don't make any claims that this covers all edge cases, in fact there are a few hacks to
 make this work with a sample from Grails application.yml. If you come across edge cases that don't
 work be sure to raise an issue on github:
@@ -12,5 +12,5 @@ Strange when Graeme Rocher said:
 "But to answer the question more concretely we wanted a format that is machine writeable as well as readable﻿"
 - https://www.youtube.com/watch?v=aro3_RZqgtU
 
-Surely since there is a Config Slurper, there has to be a config writer right? Well I was wrong, and
-that was another big reason, why I wrote this library.
+Surely since there is a Config Slurper, there has to be a config writer right? Well I was wrong, partially...
+There is something, but it is limited, and didn't provide the closure based syntax.

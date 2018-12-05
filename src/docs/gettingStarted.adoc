@@ -3,32 +3,45 @@
 1. Add the following dependency:
 .build.gradle
 ----
-compile 'com.virtualdogbert:GroovyConfigWriter:0.1'
+compile 'com.virtualdogbert:GroovyConfigWriter:1.0'
 ----
 
 2. Some sample code
 [source,groovy]
 ----
-        //Some sample code using snake yml to parse yml
-        File config = new File('/path/to/application.yml')
-        String configText = config.newDataInputStream().getText()
-        List<String> docs = configText.split('---\n')
+@Grab('com.virtualdogbert:GroovyConfigWriter:1.0')
+@Grab('org.yaml:snakeyaml:1.18')
+@Grab('org.slf4j:slf4j-api:1.7.25')
+@Grab('ch.qos.logback:logback-classic:0.9.28')
 
-        //Writes out to a file
-        //GroovyConfigWriter configWriter =
-        new GroovyConfigWriter('/output/path/to/application.groovy')
 
-        //writes to System.out
-        GroovyConfigWriter configWriter = new GroovyConfigWriter()
-        Yaml yaml = new Yaml()
+import com.virtualdogbert.GroovyConfigWriter
+import org.yaml.snakeyaml.Yaml
+//Some sample code using snake yml to parse yml
+File config = new File('/home/virtualdogbert/application.yml')
+String configText = config.newDataInputStream().getText()
+List<String> docs = configText.split('---\n')
 
-        docs.findResults {
-            configWriter.writeToGroovy(yaml.load(it))
-            yaml.load(it)
-        }
+//Writes out to a file
+//GroovyConfigWriter configWriter = new GroovyConfigWriter('/home/virtualdogbert/application.groovy')
 
-        //flushes writer and closes it
-        configWriter.close()
+
+//writes to System.out
+GroovyConfigWriter configWriter = new GroovyConfigWriter()
+//GroovyConfigWriter configWriter = new GroovyConfigWriter(indentSpacer:'  ', quoteValues:['default'], asClosure:false )
+Yaml yaml = new Yaml()
+
+docs.findResults { String document ->
+    configWriter.writeToGroovy(yaml.load(document) as Map)
+}
+
+
+/*
+ *flushes writer and closes it. If run in groovy console this will also cause
+ * the output window not to work afterward, because it will be  closed'.
+ * To get the console back you will have to restart it.
+ */
+configWriter.close()
 ----
 
 
