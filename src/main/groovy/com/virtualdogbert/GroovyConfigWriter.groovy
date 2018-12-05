@@ -197,7 +197,11 @@ class GroovyConfigWriter {
         --indentLevel
         output.write('\n')
         writeIndent()
-        output.write(']\n')
+        output.write(']')
+
+        if (asClosure) {
+            output.write('\n')
+        }
     }
 
     /**
