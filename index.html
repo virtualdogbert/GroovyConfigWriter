@@ -440,7 +440,7 @@ work be sure to raise an issue on github:
 <p>I wrote this to be used in a script to provide a conversion from yml to groovy, which I though there
 should be, because I find the groovy format to be more flexible, and readable, then yml. I found it
 Strange when Graeme Rocher said:
-"But to answer the question more concretely we wanted a format that is machine writeable as well as readable﻿"
+"But to answer the question more concretely we wanted a format that is machine writable as well as readable﻿"
 - <a href="https://www.youtube.com/watch?v=aro3_RZqgtU" class="bare">https://www.youtube.com/watch?v=aro3_RZqgtU</a></p>
 </div>
 <div class="paragraph">
@@ -454,6 +454,29 @@ There is something, but it is limited, and didn&#8217;t provide the closure base
 <div class="sectionbody">
 <div class="ulist">
 <ul>
+<li>
+<p>1.1</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Fixed and issue where yml key names that have dashes in them show up like this:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>template {
+    template['check-template-location'] = false
+}</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Updated unit tests.</p>
+</li>
+<li>
+<p>Updated documentation.</p>
+</li>
+</ul>
+</div>
+</li>
 <li>
 <p>1.0</p>
 <div class="ulist">
@@ -518,24 +541,39 @@ There is something, but it is limited, and didn&#8217;t provide the closure base
 <li>
 <p>Add the following dependency:
 .build.gradle</p>
-</li>
-</ol>
-</div>
 <div class="listingblock">
 <div class="content">
-<pre>compile 'com.virtualdogbert:GroovyConfigWriter:1.0'</pre>
+<pre>compile 'com.virtualdogbert:GroovyConfigWriter:1.1'</pre>
 </div>
 </div>
-<div class="olist arabic">
-<ol class="arabic">
+</li>
 <li>
-<p>Some sample code</p>
+<p>Parameters</p>
+<div class="ulist">
+<ul>
+<li>
+<p>fileName -  Optional file name to write the output to. By default is not specified the output will be written to System.out.</p>
 </li>
-</ol>
+<li>
+<p>config -  An Optional parameter to pass in config to be written. You can also directly call the writeToGroovy, which could be useful for writing in multiple chunks. This might be useful if your config comes from a yml file, which has multiple documents.</p>
+</li>
+<li>
+<p>indentSpacer -  Optional parameter the spacer to be used for indenting, by default four spaces is used.</p>
+</li>
+<li>
+<p>quoteValues -  values that will be quoted.</p>
+</li>
+<li>
+<p>asClosure - true by default using the closure syntax, vs the map based syntax for the groovy config.</p>
+</li>
+</ul>
 </div>
+</li>
+<li>
+<p>Some sample code:</p>
 <div class="listingblock">
 <div class="content">
-<pre>@Grab('com.virtualdogbert:GroovyConfigWriter:1.0')
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@Grab('com.virtualdogbert:GroovyConfigWriter:1.1')
 @Grab('org.yaml:snakeyaml:1.18')
 @Grab('org.slf4j:slf4j-api:1.7.25')
 @Grab('ch.qos.logback:logback-classic:0.9.28')
@@ -567,16 +605,19 @@ docs.findResults { String document -&gt;
  * the output window not to work afterward, because it will be  closed'.
  * To get the console back you will have to restart it.
  */
-configWriter.close()</pre>
+configWriter.close()</code></pre>
 </div>
+</div>
+</li>
+</ol>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.0<br>
-Last updated 2018-12-04 22:08:26 -05:00
+Version 1.1<br>
+Last updated 2018-12-04 22:19:19 -05:00
 </div>
 </div>
 </body>
