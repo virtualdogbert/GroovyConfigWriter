@@ -110,12 +110,12 @@ class GroovyConfigWriter {
 
                 if (value instanceof Map) {
 
-                    if (((String) key) in quoteValues || ((String) key).contains('-')) {
+                    if (((String) key) in quoteValues) {
 
-                        if (asClosure) {
+                        if (asClosure  && keyNameIsJavaName((value as Map<String, Object>).keySet())) {
                             writeIndent()
                             output.write("'$key' {\n")
-                        } else {
+                        } else if(!asClosure) {
                             writeIndent()
                             output.write("'$key' = ")
                             writeMapInList(value)
@@ -124,10 +124,10 @@ class GroovyConfigWriter {
                         }
                     } else {
 
-                        if (asClosure) {
+                        if (asClosure && keyNameIsJavaName((value as Map<String, Object>).keySet())) {
                             writeIndent()
                             output.write("$key {\n")
-                        } else {
+                        } else if(!asClosure) {
                             writeIndent()
                             output.write("$key = ")
                             writeMapInList(value)
@@ -141,7 +141,6 @@ class GroovyConfigWriter {
                         writeToGroovy(value as Map)
                         --indentLevel
                     } else {
-                        ++indentLevel
 
                         //Hack to work around keys that are not valid java names, like a name that had dashes in it.
                         (value as Map<Object, Object>).each { Object subKey, Object subValue ->
@@ -149,16 +148,15 @@ class GroovyConfigWriter {
                             output.write("$key['$subKey'] = ")
                             writePrimitiveORString(subValue)
                         }
-
-                        --indentLevel
                     }
 
-                    writeIndent()
-
-                    if (!indentLevel) {
-                        output.write('}\n\n')
-                    } else {
-                        output.write('}\n')
+                    if(keyNameIsJavaName((value as Map<String, Object>).keySet())) {
+                        writeIndent()
+                        if (!indentLevel) {
+                            output.write('}\n\n')
+                        } else {
+                            output.write('}\n')
+                        }
                     }
 
                 } else if (value instanceof List) {
