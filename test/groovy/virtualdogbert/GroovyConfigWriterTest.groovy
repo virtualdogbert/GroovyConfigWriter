@@ -46,9 +46,27 @@ class GroovyConfigWriterTest extends Specification {
 
 
     void "test convert Grails yml map"() {
+        when:
+            List<String> docs = applicationYml.split('---\n')
+            GroovyConfigWriter configWriter = new GroovyConfigWriter(indentSpacer: '  ', quoteValues: ['default'], asClosure: false)
+            configWriter.output = new BufferedWriter(new StringWriter())
+            Yaml yaml = new Yaml()
+
+            docs.findResults { String document ->
+                configWriter.writeToGroovy(yaml.load(document) as Map)
+            }
+
+            configWriter.output.flush()
+        then:
+            configWriter.output.out.toString() == groovyMapOutput
+    }
+
+
+    void "test convert Micrnaut yml closure"() {
             when:
-                List<String> docs = applicationYml.split('---\n')
-                GroovyConfigWriter configWriter = new GroovyConfigWriter(indentSpacer:'  ', quoteValues:['default'], asClosure:false )
+                List<String> docs = micronautYml.split('---\n')
+                GroovyConfigWriter configWriter = new GroovyConfigWriter(asClosure: false)
+
                 configWriter.output = new BufferedWriter(new StringWriter())
                 Yaml yaml = new Yaml()
 
@@ -58,9 +76,51 @@ class GroovyConfigWriterTest extends Specification {
 
                 configWriter.output.flush()
             then:
-                configWriter.output.out.toString() == groovyMapOutput
+                configWriter.output.out.toString() == micronautGroovy
         }
 
+    String micronautGroovy = """micronaut = [
+    application: [
+        name: 'complete'
+    ],
+    security: [
+        enabled: true,
+        endpoints: [
+            login: [
+                enabled: true
+            ],
+            logout: [
+                enabled: true
+            ]
+        ],
+        session: [
+            enabled: true,
+            'login-success-target-url': '/',
+            'login-failure-target-url': '/login/authFailed'
+        ]
+    ]
+]
+
+"""
+
+    String micronautYml   = """
+micronaut:
+  application:
+    name: complete
+#tag::security[]
+  security:
+    enabled: true # <1>
+    endpoints:
+      login:
+        enabled: true # <2>
+      logout:
+        enabled: true # <3>
+    session:
+      enabled: true # <4>
+      login-success-target-url: / # <5>
+      login-failure-target-url: /login/authFailed # <6>
+#end::security[]
+"""
     String applicationYml = """
 ---
 grails:
@@ -186,7 +246,7 @@ environments:
 """
 
     String groovyOutput =
-"""grails {
+            """grails {
     profile = 'web'
     codegen {
         defaultPackage = 'test.command'
@@ -352,7 +412,7 @@ environments {
 """
 
     String groovyMapOutput =
-"""grails = [
+            """grails = [
   profile: 'web',
   codegen: [
     defaultPackage: 'test.command'
