@@ -12,7 +12,7 @@ plugins {
 sourceCompatibility = 1.8
 
 group = "com.virtualdogbert"
-version = "1.0"
+version = "1.1"
 description = "This library provides a writer for Groovy base configuration, that can be parsed by the ConfigSlurper."
 
 
@@ -38,7 +38,7 @@ dependencies {
             'ch.qos.logback:logback-classic:0.9.28'
     )
 
-    testCompile(
+    testCompileOnly(
             'junit:junit:4.12',
             'org.codehaus.groovy:groovy-all:2.4.11',
             'org.spockframework:spock-core:1.0-groovy-2.4',
@@ -97,7 +97,6 @@ groovydoc {
     docTitle = packageTitle
     header = packageTitle
     include 'com/virtualdogbert/**'
-    overviewText = project.resources.text.fromFile('overview.html')
 }
 
 publishing {
