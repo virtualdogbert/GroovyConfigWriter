@@ -1,4 +1,15 @@
 == Version History
+* 1.1
+** Fixed and issue where yml key names that have dashes in them show up like this:
++
+[source,groovy]
+```
+template {
+    template['check-template-location'] = false
+}
+```
+** Updated unit tests.
+** Updated documentation.
 * 1.0
 ** People have been using it for quite a while with no major complaints, so it's time to kick it to 1.0 with some updates
 ** Added in a asClosure option, which defaults to true, however, it you change it to false you will get a map based output instead.
