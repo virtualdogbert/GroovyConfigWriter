@@ -4,7 +4,7 @@
 .build.gradle
 +
 ----
-compile 'io.github.virtualdogbert:GroovyConfigWriter:1.2'
+compile 'io.github.virtualdogbert:GroovyConfigWriter:2.0'
 ----
 1. Parameters
 * fileName -  Optional file name to write the output to. By default is not specified the output will be written to System.out.
@@ -16,10 +16,10 @@ compile 'io.github.virtualdogbert:GroovyConfigWriter:1.2'
 +
 [source,groovy]
 ----
-@Grab('io.github.virtualdogbert:GroovyConfigWriter:1.2')
+@Grab('io.github.virtualdogbert:GroovyConfigWriter:2.0')
 @Grab('org.yaml:snakeyaml:1.18')
-@Grab('org.slf4j:slf4j-api:1.7.25')
-@Grab('ch.qos.logback:logback-classic:0.9.28')
+@Grab('org.slf4j:slf4j-api:1.7.33')
+@Grab('ch.qos.logback:logback-classic:1.2.10')
 
 
 import com.virtualdogbert.GroovyConfigWriter
