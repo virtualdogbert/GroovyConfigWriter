@@ -3,7 +3,7 @@
 ** Updated all dependencies:
 *** Java 11
 *** Groovy 3.0.9
-*** Grails 7.3.3
+*** Gradle 7.3.3
 * 1.2
 ** Fixed another issue where yml names that include dashes can include more that primitives/strings, they now can support lists and maps.
 * 1.1
