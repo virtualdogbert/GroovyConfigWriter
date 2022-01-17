@@ -11,7 +11,7 @@ plugins {
 // See https://stackoverflow.com/questions/21028438/gradle-sourcecompatibility-has-no-effect-to-subprojects
 sourceCompatibility = 1.8
 
-group = "com.virtualdogbert"
+group = "io.github.virtualdogbert"
 version = "1.1"
 description = "This library provides a writer for Groovy base configuration, that can be parsed by the ConfigSlurper."
 
