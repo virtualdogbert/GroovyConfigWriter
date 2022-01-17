@@ -1,10 +1,10 @@
-
 plugins {
     id 'groovy'
     id 'maven-publish'
-    id "com.jfrog.bintray" version "1.8.4"
     id "org.asciidoctor.gradle.asciidoctor" version "1.5.1"
     id 'idea'
+    id 'signing'
+    id "io.github.gradle-nexus.publish-plugin" version "1.1.0"
 }
 
 // sourceCompatibility has to be placed after applying the Groovy (Java) Plugin:
@@ -21,9 +21,8 @@ wrapper {
 }
 
 
-
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 sourceSets {
@@ -51,7 +50,6 @@ task sourceJar(type: Jar) {
     from sourceSets.main.allSource
     classifier "sources"
 }
-
 
 
 ext {
@@ -101,7 +99,12 @@ groovydoc {
 
 publishing {
     publications {
-        groovyMaven(MavenPublication) {
+        maven(MavenPublication) {
+
+            groupId = project.group
+            artifactId = 'GroovyConfigWriter'
+            version = project.version
+
             from components.java
 
             artifact(sourceJar) {
@@ -110,6 +113,30 @@ publishing {
 
             artifact jarDoc {
                 classifier = 'javadoc'
+            }
+
+            pom {
+                name = 'Groovy Config Writer'
+                description = 'This library provides a writer for Groovy base configuration, that can be parsed by the ConfigSlurper.'
+                url = 'https://github.com/virtualdogbert/groovyConfigWriter'
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'https://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'virtualdogbert'
+                        name = 'Tucker J. Pelletier'
+                        email = 'virtualdogbert@gmail.com'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:git://github.com/virtualdogbert/groovyConfigWriter.git'
+                    developerConnection = 'scm:git:ssh://github.com:virtualdogbert/groovyConfigWriter.git'
+                    url = 'https://github.com/virtualdogbert/groovyConfigWriter/tree/master'
+                }
             }
         }
 
@@ -125,27 +152,6 @@ task jarSrc(type: Jar, dependsOn: classes) {
 artifacts {
     archives(jarSrc)
     archives(jarDoc)
-}
-
-
-bintray {
-
-    user = getPropertyOrUseDefault("bintrayUser", "fake_user")
-    key = getPropertyOrUseDefault("bintrayKey", "fake_key")
-    publications = ['groovyMaven']
-
-    def projectName = project.name
-    def projectDescription = project.description
-
-    pkg {
-        repo = 'maven'
-        name = 'GroovyConfigWriter'
-        desc = 'This library provides a writer for Groovy base configuration, that can be parsed buy the ConfigSlurper.'
-        issueTrackerUrl = "https://github.com/virtualdogbert/GroovyConfigWriter/issues"
-        vcsUrl = "https://github.com/virtualdogbert/GroovyConfigWriter/"
-        websiteUrl = "https://virtualdogbert.github.io/GroovyConfigWriter"
-        licenses = ['Apache-2.0']
-    }
 }
 
 String getPropertyOrUseDefault(String propertyName, String defaultValue) {
@@ -199,4 +205,27 @@ task docs(dependsOn: [asciidoc]) {
         into new File(buildDir, 'docs').path
         include '**/*.png'
     }
+}
+
+
+afterEvaluate {
+    signing {
+         //required { gradle.taskGraph.hasTask("publish") || gradle.taskGraph.hasTask("publishMavenPublicationToMavenLocal") }
+        sign publishing.publications.maven
+    }
+}
+
+nexusPublishing {
+   repositories {
+       sonatype {
+           def ossUser = System.getenv("SONATYPE_USERNAME") ?: project.hasProperty("sonatypeOssUsername") ? project.sonatypeOssUsername : ''
+           def ossPass = System.getenv("SONATYPE_PASSWORD") ?: project.hasProperty("sonatypeOssPassword") ? project.sonatypeOssPassword : ''
+           def ossStagingProfileId = System.getenv("SONATYPE_STAGING_PROFILE_ID") ?: project.hasProperty("sonatypeOssStagingProfileId") ? project.sonatypeOssStagingProfileId : ''
+           nexusUrl = uri("https://s01.oss.sonatype.org/service/local/")
+           snapshotRepositoryUrl = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
+           username = ossUser
+           password = ossPass
+           stagingProfileId = ossStagingProfileId
+       }
+   }
 }
