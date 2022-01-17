@@ -1,7 +1,7 @@
 plugins {
     id 'groovy'
     id 'maven-publish'
-    id "org.asciidoctor.gradle.asciidoctor" version "1.5.1"
+    id "org.asciidoctor.jvm.convert" version "3.3.2"
     id 'idea'
     id 'signing'
     id "io.github.gradle-nexus.publish-plugin" version "1.1.0"
@@ -12,12 +12,12 @@ plugins {
 sourceCompatibility = 1.8
 
 group = "io.github.virtualdogbert"
-version = "1.2"
+version = "2.0"
 description = "This library provides a writer for Groovy base configuration, that can be parsed by the ConfigSlurper."
 
 
 wrapper {
-    gradleVersion = '5.0'
+    gradleVersion = '7.3.3'
 }
 
 
@@ -31,19 +31,18 @@ sourceSets {
 }
 
 dependencies {
-    compileOnly(
-            'org.codehaus.groovy:groovy-all:2.5.4',
-            'org.slf4j:slf4j-api:1.6.1',
-            'ch.qos.logback:logback-classic:0.9.28'
-    )
 
-    testCompileOnly(
-            'junit:junit:4.12',
-            'org.codehaus.groovy:groovy-all:2.4.11',
-            'org.spockframework:spock-core:1.0-groovy-2.4',
-            'ch.qos.logback:logback-classic:0.9.28',
-            'org.yaml:snakeyaml:1.18'
-    )
+    compileOnly 'org.codehaus.groovy:groovy:3.0.9'
+    compileOnly 'org.slf4j:slf4j-api:1.7.33'
+    compileOnly 'ch.qos.logback:logback-classic:1.2.10'
+
+
+    //'junit:junit:4.12',
+    testImplementation 'org.codehaus.groovy:groovy:3.0.9'
+    testImplementation 'org.spockframework:spock-core:2.0-groovy-3.0'
+    testImplementation 'ch.qos.logback:logback-classic:1.2.10'
+    testImplementation 'org.yaml:snakeyaml:1.18'
+
 }
 
 task sourceJar(type: Jar) {
@@ -163,7 +162,6 @@ def asciidoctorAttributes = [
         docinfo1            : 'true',
         doctype             : 'book',
         encoding            : 'utf-8',
-        'front-cover-image' : 'image:cover.png[Front Cover,800,600]',
         icons               : 'font',
         id                  : project.name + ':' + project.version,
         idprefix            : '',
@@ -180,52 +178,35 @@ def asciidoctorAttributes = [
         toclevels           : '2'
 ]
 
-import org.asciidoctor.gradle.AsciidoctorTask
+asciidoctor {
+  sourceDir  file('src/docs')
+  outputDir  file('build/docs')
+    baseDirFollowsSourceDir()
 
-tasks.withType(AsciidoctorTask) {
-    attributes asciidoctorAttributes
-    outputDir new File(buildDir, 'docs')
-    separateOutputDirs = false
-    sourceDir = file('src/docs')
-    sources {
-        include 'index.adoc'
-    }
-}
-
-task asciidoc(type: AsciidoctorTask, description: 'Generates single-page HTML') {
-    backends 'html5'
-}
-
-task docs(dependsOn: [asciidoc]) {
-
-    File dir = new File(buildDir, 'docs')
-
-    copy {
-        from 'src/docs'
-        into new File(buildDir, 'docs').path
-        include '**/*.png'
+    asciidoctorj {
+        attributes = asciidoctorAttributes
     }
 }
 
 
 afterEvaluate {
     signing {
-         //required { gradle.taskGraph.hasTask("publish") || gradle.taskGraph.hasTask("publishMavenPublicationToMavenLocal") }
+        //required { gradle.taskGraph.hasTask("publish") || gradle.taskGraph.hasTask("publishMavenPublicationToMavenLocal") }
         sign publishing.publications.maven
     }
 }
 
 nexusPublishing {
-   repositories {
-       sonatype {
-           def ossUser = System.getenv("SONATYPE_USERNAME") ?: project.hasProperty("sonatypeOssUsername") ? project.sonatypeOssUsername : ''
-           def ossPass = System.getenv("SONATYPE_PASSWORD") ?: project.hasProperty("sonatypeOssPassword") ? project.sonatypeOssPassword : ''
-           def ossStagingProfileId = System.getenv("SONATYPE_STAGING_PROFILE_ID") ?: project.hasProperty("sonatypeOssStagingProfileId") ? project.sonatypeOssStagingProfileId : ''
-           nexusUrl = uri("https://s01.oss.sonatype.org/service/local/")
-           snapshotRepositoryUrl = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
-           username = ossUser
-           password = ossPass
-           stagingProfileId = ossStagingProfileId
-       }
-   }
+    repositories {
+        sonatype {
+            def ossUser = System.getenv("SONATYPE_USERNAME") ?: project.hasProperty("sonatypeOssUsername") ? project.sonatypeOssUsername : ''
+            def ossPass = System.getenv("SONATYPE_PASSWORD") ?: project.hasProperty("sonatypeOssPassword") ? project.sonatypeOssPassword : ''
+            def ossStagingProfileId = System.getenv("SONATYPE_STAGING_PROFILE_ID") ?: project.hasProperty("sonatypeOssStagingProfileId") ? project.sonatypeOssStagingProfileId : ''
+            nexusUrl = uri("https://s01.oss.sonatype.org/service/local/")
+            snapshotRepositoryUrl = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
+            username = ossUser
+            password = ossPass
+            stagingProfileId = ossStagingProfileId
+        }
+    }
 }
