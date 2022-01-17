@@ -149,9 +149,22 @@ info:
         version: '@info.app.version@'
         grailsVersion: '@info.app.grailsVersion@'
 spring:
+    jmx:
+        unique-names: true
+    main:
+        banner-mode: "off"
     groovy:
         template:
             check-template-location: false
+    devtools:
+        restart:
+            additional-exclude:
+                - '*.gsp'
+                - '**/*.gsp'
+                - '*.gson'
+                - '**/*.gson'
+                - 'logback.groovy'
+                - '*.properties'
 ---
 command:
     response:
@@ -278,8 +291,20 @@ info {
 }
 
 spring {
+    jmx['unique-names'] = true
+    main['banner-mode'] = 'off'
     groovy {
         template['check-template-location'] = false
+    }
+    devtools {
+        restart['additional-exclude'] = [
+            '*.gsp',
+            '**/*.gsp',
+            '*.gson',
+            '**/*.gson',
+            'logback.groovy',
+            '*.properties'
+        ]
     }
 }
 
@@ -440,9 +465,27 @@ info = [
 ]
 
 spring = [
+  jmx: [
+    'unique-names': true
+  ],
+  main: [
+    'banner-mode': 'off'
+  ],
   groovy: [
     template: [
       'check-template-location': false
+    ]
+  ],
+  devtools: [
+    restart: [
+      'additional-exclude': [
+        '*.gsp',
+        '**/*.gsp',
+        '*.gson',
+        '**/*.gson',
+        'logback.groovy',
+        '*.properties'
+      ]
     ]
   ]
 ]

@@ -1,5 +1,8 @@
 == Version History
+* 1.2
+** Fixed another issue where yml names that include dashes can include more that primitives/strings, they now can support lists and maps.
 * 1.1
+** was re-relase to maven central using new coordinates 'io.github.virtualdogbert:GroovyConfigWriter:1.1'
 ** Fixed and issue where yml key names that have dashes in them show up like this:
 +
 [source,groovy]

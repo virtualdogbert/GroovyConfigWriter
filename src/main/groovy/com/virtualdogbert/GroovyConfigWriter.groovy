@@ -146,7 +146,16 @@ class GroovyConfigWriter {
                         (value as Map<Object, Object>).each { Object subKey, Object subValue ->
                             writeIndent()
                             output.write("$key['$subKey'] = ")
-                            writePrimitiveORString(subValue)
+
+                            if(subValue instanceof List){
+                                writeList(subValue as List)
+                            } else if(subValue instanceof  Map){
+                                ++indentLevel
+                                writeToGroovy(subValue as Map)
+                                --indentLevel
+                            }else {
+                                writePrimitiveORString(subValue)
+                            }
                         }
                     }
 
@@ -178,7 +187,7 @@ class GroovyConfigWriter {
      * @param list the list to write out to the config writer.
      */
     void writeList(List list) {
-        int endIndex = list.size() - 1
+        int endIndex = list.size() ? list.size() - 1 : 0
         output.write('[\n')
         ++indentLevel
 
