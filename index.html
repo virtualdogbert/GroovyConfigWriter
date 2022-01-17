@@ -455,9 +455,22 @@ There is something, but it is limited, and didn&#8217;t provide the closure base
 <div class="ulist">
 <ul>
 <li>
+<p>1.2</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Fixed another issue where yml names that include dashes can include more that primitives/strings, they now can support lists and maps.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
 <p>1.1</p>
 <div class="ulist">
 <ul>
+<li>
+<p>was re-relase to maven central using new coordinates 'io.github.virtualdogbert:GroovyConfigWriter:1.1'</p>
+</li>
 <li>
 <p>Fixed and issue where yml key names that have dashes in them show up like this:</p>
 <div class="listingblock">
@@ -543,7 +556,7 @@ There is something, but it is limited, and didn&#8217;t provide the closure base
 .build.gradle</p>
 <div class="listingblock">
 <div class="content">
-<pre>compile 'io.github.virtualdogbert:GroovyConfigWriter:1.1'</pre>
+<pre>compile 'io.github.virtualdogbert:GroovyConfigWriter:1.2'</pre>
 </div>
 </div>
 </li>
@@ -573,7 +586,7 @@ There is something, but it is limited, and didn&#8217;t provide the closure base
 <p>Some sample code:</p>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@Grab('io.github.virtualdogbert:GroovyConfigWriter:1.1')
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@Grab('io.github.virtualdogbert:GroovyConfigWriter:1.2')
 @Grab('org.yaml:snakeyaml:1.18')
 @Grab('org.slf4j:slf4j-api:1.7.25')
 @Grab('ch.qos.logback:logback-classic:0.9.28')
@@ -616,8 +629,8 @@ configWriter.close()</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.1<br>
-Last updated 2022-01-16 20:55:54 -05:00
+Version 1.2<br>
+Last updated 2022-01-16 21:01:23 -05:00
 </div>
 </div>
 </body>
