@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.10">
 <meta name="copyright" content="Apache License, Version 2.0">
-<title>Introduction</title>
+<title>Version History</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -443,38 +443,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#introduction">1. Introduction</a></li>
-<li><a href="#version-history">2. Version History</a></li>
-<li><a href="#getting-started">3. Getting Started</a></li>
+<li><a href="#version-history">1. Version History</a></li>
 </ul>
 </div>
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="introduction">1. Introduction</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>This Library is  a config writer for the groovy format used, by the config
-slurper. I don&#8217;t make any claims that this covers all edge cases, in fact there are a few hacks to
-make this work with a sample from Grails application.yml. If you come across edge cases that don&#8217;t
-work be sure to raise an issue on github:
-<a href="https://www.youtube.com/watch?v=aro3_RZqgtU" class="bare">https://www.youtube.com/watch?v=aro3_RZqgtU</a></p>
-</div>
-<div class="paragraph">
-<p>I wrote this to be used in a script to provide a conversion from yml to groovy, which I though there
-should be, because I find the groovy format to be more flexible, and readable, then yml. I found it
-Strange when Graeme Rocher said:
-"But to answer the question more concretely we wanted a format that is machine writable as well as readable﻿"
-- <a href="https://www.youtube.com/watch?v=aro3_RZqgtU" class="bare">https://www.youtube.com/watch?v=aro3_RZqgtU</a></p>
-</div>
-<div class="paragraph">
-<p>Surely since there is a Config Slurper, there has to be a config writer right? Well I was wrong, partially&#8230;&#8203;
-There is something, but it is limited, and didn&#8217;t provide the closure based syntax.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="version-history">2. Version History</h2>
+<h2 id="version-history">1. Version History</h2>
 <div class="sectionbody">
 <div class="ulist">
 <ul>
@@ -593,91 +568,11 @@ There is something, but it is limited, and didn&#8217;t provide the closure base
 </div>
 </div>
 </div>
-<div class="sect1">
-<h2 id="getting-started">3. Getting Started</h2>
-<div class="sectionbody">
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Add the following dependency:
-.build.gradle</p>
-<div class="listingblock">
-<div class="content">
-<pre>compile 'io.github.virtualdogbert:GroovyConfigWriter:1.2'</pre>
-</div>
-</div>
-</li>
-<li>
-<p>Parameters</p>
-<div class="ulist">
-<ul>
-<li>
-<p>fileName -  Optional file name to write the output to. By default is not specified the output will be written to System.out.</p>
-</li>
-<li>
-<p>config -  An Optional parameter to pass in config to be written. You can also directly call the writeToGroovy, which could be useful for writing in multiple chunks. This might be useful if your config comes from a yml file, which has multiple documents.</p>
-</li>
-<li>
-<p>indentSpacer -  Optional parameter the spacer to be used for indenting, by default four spaces is used.</p>
-</li>
-<li>
-<p>quoteValues -  values that will be quoted.</p>
-</li>
-<li>
-<p>asClosure - true by default using the closure syntax, vs the map based syntax for the groovy config.</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>Some sample code:</p>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code data-lang="groovy">@Grab('io.github.virtualdogbert:GroovyConfigWriter:1.2')
-@Grab('org.yaml:snakeyaml:1.18')
-@Grab('org.slf4j:slf4j-api:1.7.25')
-@Grab('ch.qos.logback:logback-classic:0.9.28')
-
-
-import com.virtualdogbert.GroovyConfigWriter
-import org.yaml.snakeyaml.Yaml
-//Some sample code using snake yml to parse yml
-File config = new File('/home/virtualdogbert/application.yml')
-String configText = config.newDataInputStream().getText()
-List&lt;String&gt; docs = configText.split('---\n')
-
-//Writes out to a file
-//GroovyConfigWriter configWriter = new GroovyConfigWriter('/home/virtualdogbert/application.groovy')
-
-
-//writes to System.out
-GroovyConfigWriter configWriter = new GroovyConfigWriter()
-//GroovyConfigWriter configWriter = new GroovyConfigWriter(indentSpacer:'  ', quoteValues:['default'], asClosure:false )
-Yaml yaml = new Yaml()
-
-docs.findResults { String document -&gt;
-    configWriter.writeToGroovy(yaml.load(document) as Map)
-}
-
-
-/*
- *flushes writer and closes it. If run in groovy console this will also cause
- * the output window not to work afterward, because it will be  closed'.
- * To get the console back you will have to restart it.
- */
-configWriter.close()</code></pre>
-</div>
-</div>
-</li>
-</ol>
-</div>
-</div>
-</div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 2.0<br>
-Last updated 2022-01-17 09:37:27 -0500
+Last updated 2022-01-17 11:05:34 -0500
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
